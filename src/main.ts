@@ -1,152 +1,111 @@
-let stringArr = ['one', 'two', 'three'];
+// Type Aliases
+type stringOrNumber = string | number;
 
-let guitars = ['Strat', 'Les Paul', 5150];
+type stringOrNumberArray = (string | number)[];
 
-let mixedData = ['EVH', 1984, true];
-
-stringArr[0] = 'Hello';
-stringArr.push('World');
-
-guitars[0] = 1984;
-guitars.unshift('Jim');
-
-// stringArr = guitars; // error
-guitars = stringArr;
-
-let test = [];
-let bands: string[] = [];
-bands.push('Van Halen');
-
-// Tuple
-let myTuple: [string, number, boolean] = ['value', 123, true];
-
-let mixed = ['John', 1, false];
-
-mixed = myTuple;
-// myTuple = mixed; // error
-// myTuple[3] = 42; // error
-
-// Objects
-let myObject: object;
-myObject = [];
-console.log(typeof myObject);
-myObject = bands;
-myObject = {};
-
-const exampleObj = {
-  prop1: 'Dave',
-  prop2: true,
-};
-// exampleObj.prop2 = 42; // error
-
-// Type Assertion
 type Guitarist = {
-  name: string;
-  active: boolean;
-  albums: (string | number)[];
-};
-
-let evh: Guitarist = {
-  name: 'Eddie',
-  active: false,
-  albums: [1984, 5150, 'OU812'],
-};
-
-let jp: Guitarist = {
-  name: 'Jimmy',
-  active: true,
-  albums: ['I', 'II', 'IV'],
-};
-
-evh = jp;
-// evh.years = 40; // error
-
-// Optional Properties
-type Guitarist2 = {
-  name: string;
-  active?: boolean;
-  albums: (string | number)[];
-};
-
-let evh2: Guitarist2 = {
-  name: 'Eddie',
-  active: false,
-  albums: [1984, 5150, 'OU812'],
-};
-
-let jp2: Guitarist2 = {
-  name: 'Jimmy',
-  albums: ['I', 'II', 'IV'],
-};
-
-evh2 = jp2;
-
-const greetGuitarist = (guitarist: Guitarist) => {
-  return 'Hello, ' + guitarist.name + '!';
-};
-
-console.log(greetGuitarist(jp));
-
-// Interfaces
-interface Guitarist3 {
-  name: string;
-  active: boolean;
-  albums: (string | number)[];
-}
-
-let evh3: Guitarist3 = {
-  name: 'Eddie',
-  active: false,
-  albums: [1984, 5150, 'OU812'],
-};
-
-console.log(greetGuitarist(evh3));
-
-// If name is optional
-interface Guitarist4 {
   name?: string;
   active: boolean;
-  albums: (string | number)[];
-}
-
-// name, must be optional also to use a method on it
-const greetGuitarist4 = (guitarist: Guitarist4) => {
-  return 'Hello, ' + guitarist.name?.toUpperCase() + '!';
+  albums: stringOrNumberArray;
 };
 
-// or
-const greetGuitarist5 = (guitarist: Guitarist4) => {
-  if (guitarist.name) {
-    return 'Hello, ' + guitarist.name.toUpperCase() + '!';
+type UserId = stringOrNumber;
+
+// interface PostID = stringOrNumber; // It doesn't work
+
+// Literal types
+let myName: 'Jen'; // This is a literal type "Jen", not a string!
+// myName = 'John'; // It does not work
+
+let userName: 'Jen' | 'Cory' | 'Blue'; // Works with literal types
+userName = 'Jen'; // Works
+// userName = 'Rachel'; // Does not work
+
+// Functions
+
+const add = (a: number, b: number): number => {
+  return a + b;
+};
+
+const logMsg = (message: any): void => {
+  console.log(message);
+};
+
+logMsg('Hello');
+logMsg(add(2, 3));
+// logMsg(add('a', 3)); // It does not work
+
+let subtract = function (c: number, d: number): number {
+  return c - d;
+};
+
+type mathFunction = (a: number, b: number) => number;
+// interface mathFunction {
+//   (a: number, b: number): number;
+// } // It works as well
+
+let multiply: mathFunction = function (c, d) {
+  return c * d;
+};
+
+logMsg(multiply(2, 3));
+
+// Optional Parameters
+const addAll = (a: number, b: number, c?: number): number => {
+  if (typeof c !== 'undefined') {
+    return a + b + c;
   }
-  return 'Hello!';
+  return a + b;
 };
 
-const rwb: Guitarist4 = {
-  active: true,
-  albums: [1984, 5150, 'OU812'],
+// Default Parameters
+const sumAll = (a: number, b: number, c: number = 2): number => {
+  return a + b + c;
 };
 
-console.log(greetGuitarist5(rwb));
+logMsg(addAll(2, 3, 2));
+logMsg(addAll(2, 3));
+logMsg(sumAll(2, 3));
 
-// Enums
+const sumAllDefault = (a: number = 10, b: number, c: number = 2): number => {
+  return a + b + c;
+};
 
-enum Grade {
-  U,
-  D,
-  C,
-  B,
-  A,
-}
+// You have to specify undefined if the parameter has a default value and it is not the last one.
+logMsg(sumAllDefault(undefined, 3));
 
-console.log(Grade.U); // 0
+// Rest Parameters
+// The rest params should come at the end
+const total = (a: number, ...nums: number[]): number => {
+  return a + nums.reduce((prev, current) => prev + current);
+};
 
-enum Grades {
-  U = 1,
-  D,
-  C,
-  B,
-  A,
-}
+logMsg(total(1, 2, 3, 4));
 
-console.log(Grades.U); // 1
+// Never type
+const createError = (errMsg: string): never => {
+  throw new Error(errMsg);
+};
+
+const infiniteLoop = () => {
+  let i: number = 1;
+  while (true) {
+    i++;
+    if (i > 100) {
+      break;
+    }
+  }
+};
+
+// Custom type guard
+const isNumber = (value: any): boolean => {
+  return typeof value === 'number' ? true : false;
+};
+
+// Use of never type
+const numberOrString = (value: number | string): string => {
+  if (typeof value === 'string') return 'string';
+  if (isNumber(value)) return 'number';
+
+  return createError('This should never happen');
+};
