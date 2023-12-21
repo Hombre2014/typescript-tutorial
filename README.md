@@ -18,7 +18,7 @@
 
 Contributions, issues, and feature requests are welcome!
 
-Feel free to check the [issues page](https://github.com/Hombre/typescript/issues).
+Feel free to check the [issues page](https://github.com/Hombre2014/typescript-tutorial/issues).
 
 ## Show your support
 
