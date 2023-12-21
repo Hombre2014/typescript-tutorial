@@ -1,36 +1,141 @@
-type One = string;
-type Two = string | number;
-type Three = 'hello';
+// Original code
+// class Coder {
+//   name: string;
+//   music: string;
+//   age: number;
+//   lang: string;
 
-// convert to more or less specific types
-let a: One = 'hello';
-let b = a as Two; // less specific
-let c = a as Three; // more specific
+//   constructor(name: string, music: string, age: number, lang: string) {
+//     this.name = name;
+//     this.music = music;
+//     this.age = age;
+//     this.lang = lang;
+//   }
+// }
 
-let d = <One>'world';
-let e = <string | number>'world';
+// Converted code
+class Coder {
+  secondLang!: string; // if you want to add a new property without an initializer
+  constructor(
+    public readonly name: string,
+    public music: string,
+    private age: number,
+    protected lang: string = 'TypeScript'
+  ) {
+    this.name = name;
+    this.music = music;
+    this.age = age;
+    this.lang = lang;
+  }
 
-const addOrConcat = (
-  a: number,
-  b: number,
-  c: 'add' | 'concat'
-): number | string => {
-  if (c === 'add') return a + b;
-  return '' + a + b;
-};
+  public getAge() {
+    return `Hello, I'm ${this.age}.`;
+  }
+}
 
-let myVal: string = addOrConcat(2, 2, 'concat') as string;
+const Dave = new Coder('Dave', 'Rock', 42);
+console.log(Dave.getAge());
+// console.log(Dave.age); // error
+// console.log(Dave.lang); // error
 
-// Be careful, because TS sees no problem, but a string is returned!
-let nextVal: number = addOrConcat(2, 2, 'concat') as number;
+class WebDev extends Coder {
+  constructor(
+    public computer: string,
+    name: string,
+    music: string,
+    age: number
+  ) {
+    super(name, music, age);
+    this.computer = computer;
+  }
 
-// 10 as string; // Not possible
-10 as unknown as string; // Possible
+  public getLang() {
+    return `I write ${this.lang}.`;
+  }
+}
 
-// The DOM
-const img = document.querySelector('img')!;
-const myImg = document.getElementById('#img') as HTMLImageElement;
-const nextImg = <HTMLImageElement>document.getElementById('#img'); // Does not work in TSX in React
+const Sara = new WebDev('Mac', 'Sara', 'Jazz', 25);
+console.log(Sara.getLang());
+// console.log(Sara.age); // Still private
+// console.log(Sara.lang); // Still protected
 
-img.src;
-myImg.src;
+////////////////////////////////////////////////////////////////////////////////
+
+interface Musician {
+  name: string;
+  instrument: string;
+  play(action: string): string;
+}
+
+class Guitarist implements Musician {
+  name: string;
+  instrument: string;
+
+  constructor(name: string, instrument: string) {
+    this.name = name;
+    this.instrument = instrument;
+  }
+
+  play(action: string) {
+    return `${this.name} ${action} the ${this.instrument}`;
+  }
+}
+
+const Page = new Guitarist('Jimmy', 'Guitar');
+console.log(Page.play('strum'));
+
+/////////////////////////////////////////////////
+
+class Peeps {
+  static count = 0;
+
+  static getCount() {
+    return Peeps.count;
+  }
+
+  public id: number;
+
+  constructor(public name: string) {
+    this.name = name;
+    this.id = ++Peeps.count;
+  }
+}
+
+const John = new Peeps('John');
+const Steve = new Peeps('Steve');
+const Amy = new Peeps('Amy');
+
+console.log(Amy.id);
+console.log(Steve.id);
+console.log(John.id);
+console.log(Peeps.count);
+
+/////////////////////////////////////////////////////////
+
+class Bands {
+  private dataState: string[];
+
+  constructor() {
+    this.dataState = [];
+  }
+
+  public get data(): string[] {
+    return this.dataState;
+  }
+
+  public set data(value: string[]) {
+    if (Array.isArray(value) && value.every((el) => typeof el === 'string')) {
+      this.dataState = value;
+      return;
+    } else {
+      throw new Error('Param is not an array of strings');
+    }
+  }
+}
+
+const MyBands = new Bands();
+MyBands.data = ['Neil Young', 'Led Zeppelin'];
+console.log(MyBands.data);
+MyBands.data = [...MyBands.data, 'ZZ Top'];
+console.log(MyBands.data);
+// MyBands.data = 'Van Halen'; // error
