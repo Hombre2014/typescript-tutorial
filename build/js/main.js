@@ -1,124 +1,77 @@
 "use strict";
-const stringEcho = (arg) => {
-    return arg;
+// Utility Types
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
 };
-const echo = (arg) => arg;
-const isObj = (arg) => {
-    return typeof arg === 'object' && !Array.isArray(arg) && arg !== null;
+const updateAssignment = (assign, propsToUpdate) => {
+    return Object.assign(Object.assign({}, assign), propsToUpdate);
 };
-console.log(isObj(true));
-console.log(isObj('John'));
-console.log(isObj([1, 2, 3]));
-console.log(isObj({ name: 'John' }));
-console.log(isObj(null));
-const isTrue = (arg) => {
-    if (Array.isArray(arg) && !arg.length) {
-        return { arg, is: false };
-    }
-    if (isObj(arg) && !Object.keys(arg).length) {
-        return { arg, is: false };
-    }
-    return { arg, is: !!arg };
+const assign1 = {
+    studentId: 'compsci123',
+    title: 'Final Project',
+    grade: 0,
 };
-console.log(isTrue(false));
-console.log(isTrue(0));
-console.log(isTrue(true));
-console.log(isTrue(1));
-console.log(isTrue('Dave'));
-console.log(isTrue(''));
-console.log(isTrue(null));
-console.log(isTrue(undefined));
-console.log(isTrue({})); // modified
-console.log(isTrue({ name: 'Dave' }));
-console.log(isTrue([])); // modified
-console.log(isTrue([1, 2, 3]));
-console.log(isTrue(NaN));
-console.log(isTrue(-0));
-const checkBoolValue = (arg) => {
-    if (Array.isArray(arg) && !arg.length) {
-        return { value: arg, is: false };
-    }
-    if (isObj(arg) && !Object.keys(arg).length) {
-        return { value: arg, is: false };
-    }
-    return { value: arg, is: !!arg };
+console.log(updateAssignment(assign1, { grade: 95 }));
+const assignGraded = updateAssignment(assign1, { grade: 95 });
+// Required and Readonly
+const recordAssignment = (assign) => {
+    // send to DB
+    return assign;
 };
-const processUser = (user) => {
-    // process the user with logic here
-    return user;
+const assignVerified = Object.assign(Object.assign({}, assignGraded), { verified: true });
+// assignVerified.grade = 88; // It's read-only
+// recordAssignment(assignGraded); // verified is missing, so it will not be accepted
+recordAssignment(Object.assign(Object.assign({}, assignGraded), { verified: true }));
+// Record
+const hexColorMap = {
+    red: '#FF0000',
+    green: '#00FF00',
+    blue: '#0000FF',
 };
-console.log(processUser({ id: 1, name: 'Dave' }));
-// console.log(processUser({ name: 'Dave' })); // error
-const getUsersProperty = (users, key) => {
-    return users.map((user) => user[key]);
+const finalGrades = {
+    Sara: 'B',
+    Kelly: 'U',
 };
-const usersArray = [
-    {
-        id: 1,
-        name: 'Leanne Graham',
-        username: 'Bret',
-        email: 'Sincere@april.biz',
-        address: {
-            street: 'Kulas Light',
-            suite: 'Apt. 556',
-            city: 'Gwenborough',
-            zipcode: '92998-3874',
-            geo: {
-                lat: '-37.3159',
-                lng: '81.1496',
-            },
-        },
-        phone: '1-770-736-8031 x56442',
-        website: 'hildegard.org',
-        company: {
-            name: 'Romaguera-Crona',
-            catchPhrase: 'Multi-layered client-server neural-net',
-            bs: 'harness real-time e-markets',
-        },
-    },
-    {
-        id: 2,
-        name: 'Ervin Howell',
-        username: 'Antonette',
-        email: 'Shanna@melissa.tv',
-        address: {
-            street: 'Victor Plains',
-            suite: 'Suite 879',
-            city: 'Wisokyburgh',
-            zipcode: '90566-7771',
-            geo: {
-                lat: '-43.9509',
-                lng: '-34.4618',
-            },
-        },
-        phone: '010-692-6593 x09125',
-        website: 'anastasia.net',
-        company: {
-            name: 'Deckow-Crist',
-            catchPhrase: 'Proactive didactic contingency',
-            bs: 'synergize scalable supply-chains',
-        },
-    },
-];
-console.log(getUsersProperty(usersArray, 'email'));
-console.log(getUsersProperty(usersArray, 'username'));
-///////////////////////////////////////
-class StateObject {
-    constructor(value) {
-        this.data = value;
-    }
-    get state() {
-        return this.data;
-    }
-    set state(value) {
-        this.data = value;
-    }
-}
-const store = new StateObject('Dave');
-console.log(store.state);
-store.state = 'John';
-console.log(store.state);
-const myState = new StateObject([15]);
-console.log(myState.state);
-myState.state = ['Dave', 42, true];
-console.log(myState.state);
+const gradeData = {
+    Sara: { assign1: 90, assign2: 85 },
+    Kelly: { assign1: 100, assign2: 92 },
+};
+const score = {
+    studentId: 'k123',
+    grade: 85,
+};
+const preview = {
+    studentId: 'k123',
+    title: 'Final Project',
+};
+// ReturnType
+// type newAssign = { title: string; points: number };
+// const createNewAssign = (title: string, points: number): newAssign => {
+//   return { title, points };
+// };
+const createNewAssign = (title, points) => {
+    return { title, points };
+};
+const tsAssign = createNewAssign('Utility Types', 100);
+console.log(tsAssign);
+const assignArgs = ['Generics', 100];
+const tsAssign2 = createNewAssign(...assignArgs);
+console.log(tsAssign2);
+const fetchUsers = () => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield fetch('https://jsonplaceholder.typicode.com/users')
+        .then((res) => {
+        return res.json();
+    })
+        .catch((err) => {
+        if (err instanceof Error)
+            console.log(err.message);
+    });
+    return data;
+});
+fetchUsers().then((users) => console.log('users', users));
